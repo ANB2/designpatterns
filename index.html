@@ -1,0 +1,655 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>JavaScript Design Patterns</title>
+
+		<meta name="description" content="Slideshow for JavaScript Design Patterns">
+		<meta name="author" content="Derek Brown">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/night.css" id="theme">
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+	</head>
+
+	<body>
+
+		<div class="reveal">
+			<div class="slides">
+				<section>
+					<h1>JavaScript Patterns</h1>
+					<h3>Adding Tools to Your Toolbox</h3>
+					<p>
+						<a href="http://linkedin.com/in/derekbrownjr">Derek Brown</a> / <a href="http://twitter.com/derekbrown">@derekbrown</a>
+					</p>
+				</section>
+
+				<section>
+					<section>
+						<h2>Question</h2>
+						<p>
+							Can you drive a nail into a board using a Phillips-head screwdriver?
+						</p>
+					</section>
+					<section>
+						<h2>Answer</h2>
+						<p>
+							Yep. But it'll suck. Get a hammer, moron.
+						</p>
+					</section>
+				</section>
+
+				<section>
+					<h2>Why Patterns?</h2>
+					<p>
+						Great design patterns are reusable, modular expressions of <em><u>what's going on</u></em> in your code. They allow you to communicate to other developers simply by the way you code, in addition to being easily maintainable themselves. Put simply, patterns are the available tools in the developer's toolbox.
+					</p>
+				</section>
+
+				<!-- Usage of nested vertical slides -->
+				<section>
+					<section>
+						<h2>The Patterns We'll Cover</h2>
+						<p>
+							There are hundreds of design patterns that can be leveraged for use here in your code base. Ain't nobody got time for that, so we'll cover only a few that are pretty different from one another, but are prevalent in applications, to get a glance at what's out there.
+						</p>
+						<hr>
+						<h4>For each pattern, we'll look at the following:</h4>
+						<ul>
+							<li>Definition</li>
+							<li>Code Sample</li>
+							<li>Advantages &amp; Disadvantages</li>
+							<li>Common Usage</li>
+						</ul>
+					</section>
+					<section>
+						<h2>Module / Revealing Module</h2>
+						<p>You are already familiar with this pattern. Trust me. It's one of the most common patterns on the web.</p>
+					</section>
+					<section>
+						<h2>Singleton</h2>
+						<p>There can be only one....<em>instance of this object</em>.</p>
+					</section>
+					<section>
+						<h2>Facade</h2>
+						<p>A facade is exactly what it sounds like: makeup on a bulldog. You're covering over complex, ugly things with a simplified interface for future, more scalable development.</p>
+					</section>
+					<section>
+						<h2>Command</h2>
+						<p>This pattern is useful for action-oriented objects.</p>
+					</section>
+					<section>
+						<h2>Factory</h2>
+						<p>The factory pattern lets you encapsulate multiple types of objects within a categorical constructor.</p>
+					</section>
+					<section>
+						<h2>Observer</h2>
+						<p>This is a pattern that we've talked about previously, within the context of Ember. But how can you implement a publish/subscribe model yourself? And when should you?</p>
+					</section>
+					<section>
+						<h2>Delegate</h2>
+						<p>Delegates are a pattern that allow for event-like communication between components.</p>
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h2>Module / Revealing Module</h2>
+						<p>
+							This is one of the most fundamental design patterns in the JavaScript universe. It's primary use is to include both private and public variables within a single class-like object while at the same time protecting the private methods/properties from the application.
+						</p>
+						<br>
+						<p>
+							Modules accomplish this encapsulation by using closures to protect the private pieces while allowing the developer to determine which pieces of the object should be publicly exposed to the rest of the application.
+						</p>
+					</section>
+					<section>
+						<h2>Module / Revealing Module</h2>
+						<pre>
+						<code contenteditable>
+  var myModule = (function () {
+
+    var myProperty = 'Value';
+
+    return {
+      getProperty: function () {
+        return myProperty;
+      },
+
+      setProperty: function (newValue) {
+        myProperty = newValue;
+      }
+    };
+  })();
+
+  myModule.getProperty(); // Returns 'Value'
+  myModule.setProperty('New Value');
+  myModule.getProperty(); // Returns 'New Value'
+						</code>
+						</pre>
+					</section>
+					<section>
+						<h2>Module / Revealing Module</h2>
+						<p>My return object is going to get a bit messy....</p>
+					</section>
+					<section>
+						<h2>Module / Revealing Module</h2>
+						<pre><code contenteditable>
+  var myModule = (function () {
+
+    var myProperty = 'Value';
+
+    function getProperty () {
+      return myProperty;
+    }
+
+    function setProperty (newValue) {
+      myProperty = newValue;
+    }
+
+    return {
+      get: getProperty,
+      set: setProperty
+    };
+
+  })();
+
+  myModule.get(); // Returns 'Value'
+  myModule.set('New Value');
+  myModule.get(); // Returns 'New Value'
+
+						</code></pre>
+					</section>
+					<section>
+						<h2>Advantages: Module</h2>
+						<ul>
+							<li>Clean, readable, &amp; consistent syntax.</li>
+							<li>Less clutter in the global namespace.</li>
+							<li>Allows developers to control scope of properties &amp; methods.</li>
+							<li>Localization of functions &amp; variables</li>
+						</ul>
+					</section>
+					<section>
+						<h2>Disadvantages: Module</h2>
+						<ul>
+							<li>Unit testing can be difficult if the methods aren't exposed.</li>
+							<li>Private methods are unaccessible.</li>
+							<li>Can't easily extend private methods.</li>
+						</ul>
+					</section>
+					<section>
+						<h2>Common Usage</h2>
+						<p>
+						Everything. <\sarcasm><br>
+						But really.
+						</p>
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h2>Singleton</h2>
+						<p>
+							The singleton pattern is extremely useful if you only one instance of the object to ever exist. Basically, what occurs within the Singleton pattern is that you write your object, and then as a part of that object, you have an additional method. This function simply checks if an instance of the object already exists. If it does, use that instance. If not, then create a new one and store the reference.
+						</p>
+					</section>
+					<section>
+						<h2>Singleton</h2>
+						<pre><code contenteditable>
+  var mySingleton = (function () {
+
+    var instance,
+    myProperty = 'Value';
+
+    function getProperty () {
+      return myProperty;
+    }
+
+    function setProperty (newValue) {
+      myProperty = newValue;
+    }
+
+    function initialize () {
+      return {
+        get: getProperty,
+        set: setProperty
+      };
+    }
+
+    return {
+      getInstance: function () {
+
+      if ( !instance ) {
+        instance = initialize();
+      }
+
+      return instance;
+      }
+    };
+
+  })();
+
+  var moduleA = mySingleton.getInstance();
+  var moduleB = mySingleton.getInstance();
+  moduleA.get(); // Returns 'Value'
+  moduleB.set('New Value');
+  moduleA.get(); // Returns 'New Value'
+						</code></pre>
+					</section>
+					<section>
+						<h2>Advantages: Singleton</h2>
+						<ul>
+							<li>Reduced memory usage</li>
+							<li>Single point of access</li>
+							<li>Delayed initialization prevents instantiation until required</li>
+						</ul>
+					</section>
+					<section>
+						<h2>Disadvantages: Singleton</h2>
+						<ul>
+							<li>Once an instance exists, it's difficult to "reset".</li>
+							<li>Harder to unit test.</li>
+						</ul>
+					</section>
+					<section>
+						<h2>Common Usage</h2>
+						<p>
+						Application Instances.
+						</p>
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h2>Facade</h2>
+						<p>
+							The facade pattern is often paired with other patterns to add an extra layer of security while at the same time providing a simpler interface to the underlying functionality.
+						</p>
+					</section>
+					<section>
+						<h2>Facade</h2>
+						<pre><code contenteditable>
+  var myFacade = (function () {
+
+    var myProperty = 'Value';
+
+    function getProperty () {
+      return myProperty;
+    };
+
+    function setProperty (newValue) {
+      myProperty = newValue;
+    }
+
+    return {
+      get: function () { return getProperty(); },
+      set: function (newValue) { setProperty(newValue); }
+    };
+
+  })();
+						</code></pre>
+					</section>
+					<section>
+						<h2>Advantages: Facade</h2>
+						<ul>
+							<li>Enhances security, as internal functions aren't exposed.</li>
+							<li>Easy to implement</li>
+							<li>Works well with other design patterns.</li>
+							<li>Easy to patch internals</li>
+							<li>Provides a simple public interface</li>
+						</ul>
+					</section>
+					<section>
+						<h2>Disadvantages: Facade</h2>
+						<ul>
+							<li>Is the cost of implementation really worth the extra layer of abstraction?</li>
+						</ul>
+					</section>
+					<section>
+						<h2>Common Usage</h2>
+						<p>
+							One of the most prevalent uses of the Facade pattern ever: jQuery
+						</p>
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h2>Command</h2>
+						<p>
+							The command pattern completely separates the implementation and execution of methods. Usually, in order to execute a method, you directly invoke the method itself. The command pattern takes the name of the method to execute as an argument into an "execute" or "run" method on the command object, applying the rest of the arguments list to the function being invoked.
+						</p>
+						<hr>
+						<p>In most programming, objects represent nouns. In the command pattern, objects are verbs.</p>
+					</section>
+					<section>
+						<h2>Command</h2>
+						<pre><code contenteditable>
+  var myCommand = {
+
+    requestData: function (id, attribute) {
+      return 'Data attribute ' + attribute + ' has been requested for object ' + id + '.';
+    },
+
+    clearData: function (id, attribute) {
+      return 'The data attribute ' + attribute + ' has been reset for object ' + id + '.';
+    }
+
+  }
+
+  myCommand.run = function (command) {
+    return myCommand[command.request](command.id, command.attribute)
+  };
+
+  /*
+  Alternatively, the run function could look like this, which would pass extra arguments in order to the requested command:
+  myCommand.run = function (command) {
+    return myCommand[command].apply( myCommand, [].slice.call(arguments, 1));
+  };
+
+  or for argumentless commands, you can go even simpler:
+
+  myCommand.run = function (command) {
+    return myCommand[command]();
+  }
+  */
+						</code></pre>
+					</section>
+					<section>
+						<h2>Advantages: Command</h2>
+						<ul>
+							<li>Decouples implementation from execution, which allows for extensibility while minimizing code changes.</li>
+							<li>Stacking command objects allows you to cache them, store them in a history, or otherwise manipulate them. <em>Undo</em>, anyone?</li>
+						</ul>
+					</section>
+					<section>
+						<h2>Disadvantages: Command</h2>
+						<ul>
+							<li>Counter-intuitive to most OOP practices.</li>
+							<li>Very limited use to 'verb-centric' applications.</li>
+						</ul>
+					</section>
+					<section>
+						<h2>Common Usage</h2>
+						<p>Command Line Interfaces for Node.js</p>
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h2>Factory</h2>
+						<p>
+							The factory pattern is as a interface that can be used to create objects, usually which belong to a set or category. The factory takes in the attributes of the object to be created, and then returns a new instance of our object.
+						</p>
+					</section>
+					<section>
+						<h2>Factory</h2>
+						<pre><code contenteditable>
+function Manager ( config ) {
+  this.name = config.name || 'Michael Scott';
+  this.role = config.role || 0;
+  this.user = config.user || 'MichaelScott123';
+}
+
+function Contributor ( config ) {
+  this.name = config.name || 'Bob Smith';
+  this.role = config.role || 1;
+  this.user = config.user || 'BobSmith123';
+  this.mngr = config.mngr || 'MichaelScott123';
+}
+
+function Contractor ( config ) {
+  this.name = config.name || 'John Doe';
+  this.role = config.role || 2;
+  this.user = config.user || 'JohnDoe123';
+  this.mngr = config.mngr || 'MichaelScott123';
+  this.term = config.term || '6 months';
+}
+
+function WorkerFactory() {}
+
+WorkerFactory.prototype.employeeClass = Contributor;
+WorkerFactory.prototype.hireSomeone = function ( config ){
+
+  switch (config.type){
+    case 'manager':
+      this.employeeClass = Manager;
+      break;
+    case 'contractor':
+      this.employeeClass = Contractor;
+      break;
+    default:
+      this.employeeClass = Contributor;
+      break;
+  }
+
+  return new this.employeeClass( config );
+}
+
+var HR = new WorkerFactory();
+var newHire = HR.hireSomeone({
+  type: 'manager',
+  name: 'Hulk Hogan',
+  role: 0,
+  user: 'Hulkamania'
+});
+
+console.log(newHire instanceof Manager); // True.
+						</code></pre>
+					</section>
+					<section>
+						<h2>Advantages: Factory</h2>
+						<ul>
+							<li>Allows the sharing of properties across multiple objects.</li>
+							<li>Extremely useful when object or component setup is complex.</li>
+							<li>Also useful when you need to generate different instances based on context.</li>
+						</ul>
+					</section>
+					<section>
+						<h2>Disadvantages: Factory</h2>
+						<ul>
+							<li>Fairly complex for smaller applications.</li>
+							<li>Garbage collection can have high overhead.</li>
+							<li>Can introduce problems with unit testing.</li>
+						</ul>
+					</section>
+					<section>
+						<h2>Common Usage</h2>
+						<p>Address Book (contacts), To-Do App (tasks)</p>
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h2>Observer</h2>
+						<p>
+							In the observer pattern, a type of publish-subscribe pattern, there is an object (often called the subject or observable) that notifies other objects (observers) of any changes that occur to the state of the subject. The observers are often maintained in a list on the observable, to be iterated upon when a change occurs.
+						</p>
+					</section>
+					<section>
+						<h2>Observer</h2>
+						<pre><code contenteditable>
+  var observer = {
+    addSubscriber: function (callback) {
+      this.subscribers[this.subscribers.length] = callback;
+    },
+
+    removeSubscriber: function (callback) {
+      for (var i = 0; i < this.subscribers.length; i++) {
+        if (this.subscribers[i] === callback) {
+          delete(this.subscribers[i]);
+        }
+      }
+    },
+
+    publish: function (what) {
+      for (var i = 0; i < this.subscribers.length; i++) {
+        if (typeof this.subscribers[i] === 'function') {
+          this.subscribers[i](what);
+        }
+      }
+    },
+
+    makePublisher: function (o) { // turns an object into a publisher
+      for (var i in this) {
+        o[i] = this[i];
+        o.subscribers = [];
+      }
+    }
+  };
+
+  var paulRevere = {
+    sendNews: function () {
+      var content = 'the British are coming!';
+      this.publish(content);
+    }
+  };
+
+  observer.makePublisher(paulRevere);
+
+  var townspeople = {
+    hear: function (message) {
+      console.log('We just heard that ' + message);
+    }
+  }
+
+  paulRevere.addSubscriber(townspeople.hear);
+  paulRevere.sendNews();
+						</code></pre>
+            <small>Source: <a href="https://github.com/chadhietala/connection-viewer">For another example using Ember's implementation, check out Chad Hietala's Connection Viewer repository.</a></small>
+					</section>
+					<section>
+						<h2>Advantages: Observer</h2>
+						<ul>
+							<li>Faciliates application-level thinking.</li>
+							<li>Removes direct relationships that are often unnecessary.</li>
+							<li>Can relate objects without tightly coupling them.</li>
+						</ul>
+					</section>
+					<section>
+						<h2>Disadvantages: Observer</h2>
+						<ul>
+							<li>There is no way to know if the other end of the telephone is still listening.</li>
+							<li>Subscribers aren't aware of one another.</li>
+						</ul>
+					</section>
+					<section>
+						<h2>Common Usage</h2>
+						<p>
+							YUI Custom Events. Ember Observables.
+						</p>
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h2>Delegate</h2>
+						<p>
+							In the delegate pattern, an object (the delegator) offloads a task to an associated helper object (the delegate), rather than performing the task itself. Often times, this is within an MVC framework or architecture, involving a Controller as the delegator.
+						</p>
+					</section>
+					<section>
+						<h2 id="myHeader">Delegate</h2>
+						<pre><code contenteditable>
+var ViewClass = function () {
+    return {
+        init : function (el) {
+            var $el = $(el);
+
+            // REQUIRED: delegate should have a viewWasClicked method implemented
+            $el.on('click', this.delegate.viewWasClicked);
+        },
+        delegate : null
+    };
+};
+
+var ControllerClass = function () {
+    return {
+        viewWasClicked : function (e) {
+            console.log('I was called!');
+        }
+    }
+};
+
+var controller = new ControllerClass();
+var view = new ViewClass();
+
+view.delegate = controller;
+view.init(document.getElementById('myHeader'));
+						</code></pre>
+						<small>Source: <a href="http://ddrewdesign.com/blog/understanding-objective-c-delegates-through-javascri-1">David Drew's fantastic article on implementing Objective-C Delegates in JavaScript</a></small>
+					</section>
+					<section>
+						<h2>Advantages: Delegate</h2>
+						<ul>
+							<li>Delegation allows for loose coupling without global eventing.</li>
+							<li>Easy to maintain structure within an application.</li>
+						</ul>
+					</section>
+					<section>
+						<h2>Disadvantages: Delegate</h2>
+						<ul>
+							<li>No well-structured way to enforce delegation attachment.</li>
+							<li>Assignment of delegate takes place prior to initialization.</li>
+						</ul>
+					</section>
+					<section>
+						<h2>Common Usage</h2>
+						<p>
+							Most MVC frameworks at least involve delegation in their design in some regard, due to the interaction between models, views, and controllers.
+						</p>
+					</section>
+				</section>
+
+				<section>
+					<h2>Helpful Resources &amp; Reading</h2>
+					<ul>
+						<li><a href="http://addyosmani.com/resources/essentialjsdesignpatterns/book/">Learning JavaScript Design Patterns by Addy Osmani</a></li>
+						<li><a href="https://github.com/shichuan/javascript-patterns">JavaScript Patterns on GitHub</a></li>
+            <li><a href="http://carldanley.com/javascript-design-patterns/">Carl Danley: JavaScript Design Patterns</a></li>
+						<li><a href="http://www.adobe.com/devnet/html5/articles/javascript-design-patterns-pt1-singleton-composite-facade.html">JavaScript Design Patterns on Adobe DevNet</a></li>
+            <li><a href="http://jsdesignpatterns.com/">Pro JavaScript Design Patterns</a></li>
+            <li><a href="http://www.webreference.com/programming/javascript/ncz/column5/index.html">Zakas on the Factory Pattern</a></li>
+            <li><a href="http://www.joezimjs.com/javascript/javascript-design-patterns-singleton/">JavaScript Design Patterns</a></li>
+					</ul>
+				</section>
+
+        <section>
+          <h1>Fin.</h1>
+        </section>
+
+			</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.min.js"></script>
+		<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+		<script>
+
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
